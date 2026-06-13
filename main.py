@@ -23,7 +23,6 @@ except Exception as e:
     print("config.json not found, please run 'cp config.json.sample config.json' and double check your variables")
     sys.exit(1)
     
-# Check interval in seconds (10 minutes by default)
 # Token expiry time (8 hours)
 token_expiry = datetime.now() + timedelta(hours=8)
 
