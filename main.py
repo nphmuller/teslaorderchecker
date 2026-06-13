@@ -7,24 +7,17 @@ from pathlib import Path
 import apprise
 
 BASE_DIR = Path(__file__).resolve().parent
-CONFIG_PATHS = (
-    BASE_DIR / "config.json",
-    BASE_DIR / "config.sample.json",
-)
+CONFIG_PATH = BASE_DIR / "config.json"
 LAST_DATA_PATH = BASE_DIR / "lastdata.txt"
 JSON_INDENT = 4
 
 
 def load_config():
-    for config_path in CONFIG_PATHS:
-        if config_path.exists():
-            with config_path.open("r") as config_file:
-                return json.load(config_file)
+    if CONFIG_PATH.exists():
+        with CONFIG_PATH.open("r") as config_file:
+            return json.load(config_file)
 
-    raise FileNotFoundError(
-        "No configuration file found in the expected locations: "
-        + ", ".join(str(config_path) for config_path in CONFIG_PATHS)
-    )
+    raise FileNotFoundError(f"No configuration file found at {CONFIG_PATH}")
 
 
 # Load the config file
@@ -38,7 +31,7 @@ try:
 
 except FileNotFoundError:
     print(
-        "No config file found. Create config.json or fill config.sample.json with your variables and try again."
+        "No config file found. Copy config.sample.json to config.json, fill in your variables, and try again."
     )
     sys.exit(1)
 except (json.JSONDecodeError, KeyError) as e:
