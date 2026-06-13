@@ -21,7 +21,10 @@ def load_config():
             with config_path.open("r") as config_file:
                 return json.load(config_file)
 
-    raise FileNotFoundError
+    raise FileNotFoundError(
+        "No configuration file found in the expected locations: "
+        + ", ".join(str(config_path) for config_path in CONFIG_PATHS)
+    )
 
 
 # Load the config file
@@ -41,7 +44,7 @@ except FileNotFoundError:
 except (json.JSONDecodeError, KeyError) as e:
     print(f"Invalid config file: {e}")
     sys.exit(1)
-    
+
 # Check interval in seconds (10 minutes)
 interval = 600
 # Token expiry time (8 hours)
@@ -117,7 +120,6 @@ def savedata(new_data):
 
 # Function to compare JSON data
 def compare_data(old_data, new_data, parent_key=""):
-    
     for key, value in old_data.items():
         full_key = f"{parent_key}.{key}" if parent_key else key
         if key in new_data:
