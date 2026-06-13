@@ -28,7 +28,7 @@ token_expiry = datetime.now() + timedelta(hours=8)
 
 headers = {
     "accept": "*/*",
-    "x-tesla-user-agent": "TeslaApp/4.28.2-2157",
+    "x-tesla-user-agent": "TeslaApp/4.57.0-4306",
     "charset": "utf-8",
     "cache-control": "no-cache",
     "accept-language": "en",
@@ -41,7 +41,7 @@ params = {
     "deviceLanguage": "en",
     "deviceCountry": "US",
     "referenceNumber": reservation_number,
-    "appVersion": "4.28.2-2157",
+    "appVersion": "4.57.0-4306",
 }
 
 
