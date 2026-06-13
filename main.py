@@ -15,7 +15,7 @@ try:
     reservation_number = config['reservation_number']
     apprisestr = config['apprisestr']
     wantnotification = config['notifications_enabled']
-    test_notification = config.get('test_notification', False)
+    test_notification = config['test_notification'] if 'test_notification' in config else False
 
 except Exception as e:
     # If the file is not found, print the message and exit
