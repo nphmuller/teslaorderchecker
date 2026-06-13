@@ -15,6 +15,7 @@ try:
     reservation_number = config['reservation_number']
     apprisestr = config['apprisestr']
     wantnotification = config['notifications_enabled']
+    test_notification = config.get('test_notification', False)
 
 except Exception as e:
     # If the file is not found, print the message and exit
@@ -115,7 +116,8 @@ def compare_data(old_data, new_data, parent_key=""):
 
 
 # Debug notification
-# notify("test")
+if test_notification:
+    notify("test")
 
 # Set access token for the first time
 access_token, refresh_token = refresh_access_token()
