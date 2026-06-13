@@ -26,6 +26,13 @@ TeslaOrderChecker is a simple tool designed to periodically check for changes in
 ## Usage
 Run the script with `python main.py` and wait :) 
 
+## Docker
+1. Build the image: `docker build -t teslaorderchecker .`
+2. Copy `config.sample.json` to `config.json` and fill `config.json` with your variables.
+3. Run the container from the repository directory:
+
+   `docker run --rm -it -v "$(pwd)/config.json:/app/config.json:ro" teslaorderchecker`
+
 ## Disclaimer
 - Not affiliated with Tesla, Inc.
 - Use at your own risk.
