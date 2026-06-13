@@ -16,14 +16,13 @@ try:
     apprisestr = config['apprisestr']
     wantnotification = config['notifications_enabled']
     test_notification = config.get('test_notification', False)
+    interval = config.get('interval_seconds', 600)
 
 except Exception as e:
     # If the file is not found, print the message and exit
     print("config.json not found, please run 'cp config.json.sample config.json' and double check your variables")
     sys.exit(1)
     
-# Check interval in seconds (10 minutes)
-interval = 600
 # Token expiry time (8 hours)
 token_expiry = datetime.now() + timedelta(hours=8)
 
@@ -159,4 +158,4 @@ while True:
     except Exception as e:
         print(f"An error occurred: {e}")
         # Optional: delay before continuing
-        time.sleep(600)
+        time.sleep(interval)
