@@ -20,7 +20,7 @@ TeslaOrderChecker is a simple tool designed to periodically check for changes in
 ## Setup
 1. Clone the repository. (`git clone https://github.com/WesSec/teslaorderchecker && cd teslaorderchecker`)
 2. Install required dependencies (`pip install -r requirements.txt`).
-3. Copy `config.sample.json` to `config.json` and fill `config.json` with your variables.
+3. Fill `config.sample.json` with your variables, or copy it to `config.json` and edit that file instead.
 4. If you want notifications, set `notifications_enabled` to `true` and put your [Apprise](https://github.com/caronc/apprise) URL in `apprisestr`.
 
 ## Usage
@@ -32,9 +32,6 @@ Run the script with `python main.py` and wait :)
 3. Run the container from the repository directory:
 
    `docker run --rm -it -v "$(pwd)/config.json:/app/config.json:ro" teslaorderchecker`
-
-On Windows, use `%cd%` in Command Prompt or `${PWD}` in PowerShell instead of `$(pwd)`.
-To persist the last fetched order data across container restarts, create an empty `lastdata.txt` file first and then mount it to `/app/lastdata.txt`.
 
 ## Disclaimer
 - Not affiliated with Tesla, Inc.
