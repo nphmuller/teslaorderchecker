@@ -148,7 +148,7 @@ try:
         print("[i] Continuing from last session")
         previous_data = json.load(file)
 except FileNotFoundError:
-    print("[!] No previous data found, doing intial call and saving")
+    print("[!] No previous data found, doing initial call and saving")
     previous_data = fetch_data(access_token)  # Fetch new data if file doesn't exist
     savedata(previous_data)
     print(json.dumps(previous_data, indent=JSON_INDENT))
