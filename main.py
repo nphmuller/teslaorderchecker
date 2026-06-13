@@ -10,7 +10,6 @@ BASE_DIR = Path(__file__).resolve().parent
 CONFIG_PATHS = (
     BASE_DIR / "config.json",
     BASE_DIR / "config.sample.json",
-    BASE_DIR / "config.json.sample",
 )
 LAST_DATA_PATH = BASE_DIR / "lastdata.txt"
 JSON_INDENT = 4

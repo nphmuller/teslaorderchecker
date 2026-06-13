@@ -35,7 +35,7 @@ Run the script with `python main.py` and wait :)
 
 If you prefer, you can mount a populated `config.json` to `/app/config.json` instead.
 On Windows, use `%cd%` in Command Prompt or `${PWD}` in PowerShell instead of `$(pwd)`.
-To persist the last fetched order data across container restarts, also mount `/app/lastdata.txt`.
+To persist the last fetched order data across container restarts, create an empty `lastdata.txt` file first and then mount it to `/app/lastdata.txt`.
 
 ## Disclaimer
 - Not affiliated with Tesla, Inc.
