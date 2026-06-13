@@ -20,8 +20,8 @@ TeslaOrderChecker is a simple tool designed to periodically check for changes in
 ## Setup
 1. Clone the repository. (`git clone https://github.com/WesSec/teslaorderchecker && cd teslaorderchecker`)
 2. Install required dependencies (`pip install -r requirements.txt`).
-3. Fill `config.sample.json` with your variables, or copy it to `config.json` and edit that file instead.
-4. If you want notifications, set `notifications_enabled` to `true` and put your [Apprise](https://github.com/caronc/apprise) URL in `apprisestr`.
+3. `cp config.json.sample config.json` and fill the json file with your variables.
+4. Setup the [apprise](https://github.com/caronc/apprise) string in main.py and set `notificationwanted` to `True`
 
 ## Usage
 Run the script with `python main.py` and wait :) 

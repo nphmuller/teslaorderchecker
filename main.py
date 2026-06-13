@@ -3,48 +3,24 @@ import time
 import json
 import sys
 from datetime import datetime, timedelta
-from pathlib import Path
 import apprise
-
-BASE_DIR = Path(__file__).resolve().parent
-CONFIG_PATHS = (
-    BASE_DIR / "config.json",
-    BASE_DIR / "config.sample.json",
-)
-LAST_DATA_PATH = BASE_DIR / "lastdata.txt"
-JSON_INDENT = 4
-
-
-def load_config():
-    for config_path in CONFIG_PATHS:
-        if config_path.exists():
-            with config_path.open("r") as config_file:
-                return json.load(config_file)
-
-    raise FileNotFoundError(
-        "No configuration file found in the expected locations: "
-        + ", ".join(str(config_path) for config_path in CONFIG_PATHS)
-    )
 
 
 # Load the config file
-try:
-    config = load_config()
+try: 
+    with open('config.json', 'r') as f:
+        config = json.load(f)
 
     refresh_token = config['refresh_token']
     reservation_number = config['reservation_number']
     apprisestr = config['apprisestr']
     wantnotification = config['notifications_enabled']
 
-except FileNotFoundError:
-    print(
-        "No config file found. Create config.json or fill config.sample.json with your variables and try again."
-    )
+except Exception as e:
+    # If the file is not found, print the message and exit
+    print("config.json not found, please run 'cp config.json.sample config.json' and double check your variables")
     sys.exit(1)
-except (json.JSONDecodeError, KeyError) as e:
-    print(f"Invalid config file: {e}")
-    sys.exit(1)
-
+    
 # Check interval in seconds (10 minutes)
 interval = 600
 # Token expiry time (8 hours)
@@ -115,11 +91,12 @@ def notify(message):
 
 # Save data to file
 def savedata(new_data):
-    with LAST_DATA_PATH.open('w') as file:
-        json.dump(new_data, file, indent=JSON_INDENT)
+    with open('lastdata.txt', 'w') as file:
+                json.dump(new_data, file, indent=4)
 
 # Function to compare JSON data
 def compare_data(old_data, new_data, parent_key=""):
+    
     for key, value in old_data.items():
         full_key = f"{parent_key}.{key}" if parent_key else key
         if key in new_data:
@@ -144,17 +121,17 @@ def compare_data(old_data, new_data, parent_key=""):
 access_token, refresh_token = refresh_access_token()
 # Try to load initial data from lastdata.txt
 try:
-    with LAST_DATA_PATH.open('r') as file:
+    with open('lastdata.txt', 'r') as file:
         print("[i] Continuing from last session")
         previous_data = json.load(file)
 except FileNotFoundError:
-    print("[!] No previous data found, doing initial call and saving")
+    print("[!] No previous data found, doing intial call and saving")
     previous_data = fetch_data(access_token)  # Fetch new data if file doesn't exist
     savedata(previous_data)
-    print(json.dumps(previous_data, indent=JSON_INDENT))
+    print(json.dumps(previous_data, indent=4))
 
 # uncomment if you want to print initial values
-print(json.dumps(previous_data, indent=JSON_INDENT))
+print(json.dumps(previous_data, indent=4))
 
 while True:
     try:
@@ -171,8 +148,8 @@ while True:
         previous_data = new_data
 
         # Overwrite lastdata.txt with new data
-        with LAST_DATA_PATH.open('w') as file:
-            json.dump(new_data, file, indent=JSON_INDENT)
+        with open('lastdata.txt', 'w') as file:
+            json.dump(new_data, file, indent=4)
 
         # Sleep for a while before the next request
         time.sleep(interval)
