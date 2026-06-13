@@ -1,6 +1,7 @@
 {
     "refresh_token": "eyXXXX",
     "reservation_number": "RNXXX",
+    "interval_seconds": 600,
     "notifications_enabled": false,
     "apprisestr": "",
     "test_notification": false
