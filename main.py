@@ -13,6 +13,7 @@ CONFIG_PATHS = (
     BASE_DIR / "config.json.sample",
 )
 LAST_DATA_PATH = BASE_DIR / "lastdata.txt"
+JSON_INDENT = 4
 
 
 def load_config():
@@ -116,7 +117,7 @@ def notify(message):
 # Save data to file
 def savedata(new_data):
     with LAST_DATA_PATH.open('w') as file:
-        json.dump(new_data, file, indent=4)
+        json.dump(new_data, file, indent=JSON_INDENT)
 
 # Function to compare JSON data
 def compare_data(old_data, new_data, parent_key=""):
@@ -151,10 +152,10 @@ except FileNotFoundError:
     print("[!] No previous data found, doing intial call and saving")
     previous_data = fetch_data(access_token)  # Fetch new data if file doesn't exist
     savedata(previous_data)
-    print(json.dumps(previous_data, indent=4))
+    print(json.dumps(previous_data, indent=JSON_INDENT))
 
 # uncomment if you want to print initial values
-print(json.dumps(previous_data, indent=4))
+print(json.dumps(previous_data, indent=JSON_INDENT))
 
 while True:
     try:
@@ -172,7 +173,7 @@ while True:
 
         # Overwrite lastdata.txt with new data
         with LAST_DATA_PATH.open('w') as file:
-            json.dump(new_data, file, indent=4)
+            json.dump(new_data, file, indent=JSON_INDENT)
 
         # Sleep for a while before the next request
         time.sleep(interval)

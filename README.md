@@ -34,6 +34,7 @@ Run the script with `python main.py` and wait :)
    `docker run --rm -it -v "$(pwd)/config.sample.json:/app/config.sample.json:ro" teslaorderchecker`
 
 If you prefer, you can mount a populated `config.json` to `/app/config.json` instead.
+On Windows, use `%cd%` in Command Prompt or `${PWD}` in PowerShell instead of `$(pwd)`.
 To persist the last fetched order data across container restarts, also mount `/app/lastdata.txt`.
 
 ## Disclaimer
