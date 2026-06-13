@@ -3,22 +3,43 @@ import time
 import json
 import sys
 from datetime import datetime, timedelta
+from pathlib import Path
 import apprise
+
+BASE_DIR = Path(__file__).resolve().parent
+CONFIG_PATHS = (
+    BASE_DIR / "config.json",
+    BASE_DIR / "config.sample.json",
+    BASE_DIR / "config.json.sample",
+)
+LAST_DATA_PATH = BASE_DIR / "lastdata.txt"
+
+
+def load_config():
+    for config_path in CONFIG_PATHS:
+        if config_path.exists():
+            with config_path.open("r") as config_file:
+                return json.load(config_file)
+
+    raise FileNotFoundError
 
 
 # Load the config file
-try: 
-    with open('config.json', 'r') as f:
-        config = json.load(f)
+try:
+    config = load_config()
 
     refresh_token = config['refresh_token']
     reservation_number = config['reservation_number']
     apprisestr = config['apprisestr']
     wantnotification = config['notifications_enabled']
 
-except Exception as e:
-    # If the file is not found, print the message and exit
-    print("config.json not found, please run 'cp config.json.sample config.json' and double check your variables")
+except FileNotFoundError:
+    print(
+        "No config file found. Create config.json or fill config.sample.json with your variables and try again."
+    )
+    sys.exit(1)
+except (json.JSONDecodeError, KeyError) as e:
+    print(f"Invalid config file: {e}")
     sys.exit(1)
     
 # Check interval in seconds (10 minutes)
@@ -91,8 +112,8 @@ def notify(message):
 
 # Save data to file
 def savedata(new_data):
-    with open('lastdata.txt', 'w') as file:
-                json.dump(new_data, file, indent=4)
+    with LAST_DATA_PATH.open('w') as file:
+        json.dump(new_data, file, indent=4)
 
 # Function to compare JSON data
 def compare_data(old_data, new_data, parent_key=""):
@@ -121,7 +142,7 @@ def compare_data(old_data, new_data, parent_key=""):
 access_token, refresh_token = refresh_access_token()
 # Try to load initial data from lastdata.txt
 try:
-    with open('lastdata.txt', 'r') as file:
+    with LAST_DATA_PATH.open('r') as file:
         print("[i] Continuing from last session")
         previous_data = json.load(file)
 except FileNotFoundError:
@@ -148,7 +169,7 @@ while True:
         previous_data = new_data
 
         # Overwrite lastdata.txt with new data
-        with open('lastdata.txt', 'w') as file:
+        with LAST_DATA_PATH.open('w') as file:
             json.dump(new_data, file, indent=4)
 
         # Sleep for a while before the next request
