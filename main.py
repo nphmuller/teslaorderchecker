@@ -69,15 +69,22 @@ def refresh_access_token():
     return response.json()["access_token"], response.json()["refresh_token"]
 
 
+api_failure_notified = False
+
+
 def fetch_data(acces_token):
+    global api_failure_notified
     headers["authorization"] = f"Bearer {access_token}"
     response = requests.get(
         "https://akamai-apigateway-vfx.tesla.com/tasks", params=params, headers=headers
     )
     if response.status_code != 200:
         print(f"[!] Something went wrong: {response.status_code}, {response.text}")
-    else:
-        return response.json()
+        if not api_failure_notified:
+            notify(f"API call failed (status {response.status_code}): {response.text}")
+            api_failure_notified = True
+        return None
+    return response.json()
 
 
 # Notify using Apprise
@@ -144,6 +151,11 @@ while True:
 
         # Make the API request
         new_data = fetch_data(access_token)
+        if new_data is None:
+            time.sleep(interval)
+            continue
+        api_failure_notified = False
+
         print(f"{datetime.now()} - Checking for differences")
         compare_data(previous_data, new_data)
         previous_data = new_data
