@@ -154,6 +154,8 @@ while True:
         if new_data is None:
             time.sleep(interval)
             continue
+        if api_failure_notified:
+            notify("API is working again")
         api_failure_notified = False
 
         print(f"{datetime.now()} - Checking for differences")
